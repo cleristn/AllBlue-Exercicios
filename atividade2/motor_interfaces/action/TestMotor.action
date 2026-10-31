@@ -1,0 +1,9 @@
+# goal
+int32 motor
+---
+# result
+bool success
+string message
+---
+# feedback
+int32 active_motor

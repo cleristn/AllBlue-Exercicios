@@ -1,0 +1,11 @@
+# goal vazio
+---
+# result
+bool success
+string message
+int32[] tested_motors
+---
+# feedback
+int32[] active_motors
+int32[] tested_motors
+float32 progress
