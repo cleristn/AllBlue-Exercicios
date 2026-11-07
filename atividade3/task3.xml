@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root BTCPP_format="4"
+      main_tree_to_execute="Task3">
+  <BehaviorTree ID="AcharBins">
+    <Fallback>
+      <VendoBins/>
+      <Sequence>
+        <VendoSeta/>
+        <AlinharSeta/>
+        <SeguirAteBins/>
+      </Sequence>
+      <ProcurarBins/>
+    </Fallback>
+  </BehaviorTree>
+
+  <BehaviorTree ID="ApagarLuz">
+    <RetryUntilSuccessful num_attempts="3">
+      <Fallback>
+        <Sequence>
+          <ReactiveSequence>
+            <VendoSensor/>
+            <EncostarIma/>
+          </ReactiveSequence>
+          <Sleep msec="2000"/>
+          <LuzApagou/>
+        </Sequence>
+        <ForceFailure>
+          <AfastarRobo/>
+        </ForceFailure>
+      </Fallback>
+    </RetryUntilSuccessful>
+  </BehaviorTree>
+
+  <BehaviorTree ID="ApagarLuzes">
+    <Sequence>
+      <ForceSuccess>
+        <SubTree ID="ApagarLuz"
+                 _autoremap="true"/>
+      </ForceSuccess>
+      <ForceSuccess>
+        <MudarDeLuz/>
+      </ForceSuccess>
+      <ForceSuccess>
+        <SubTree ID="ApagarLuz"
+                 _autoremap="true"/>
+      </ForceSuccess>
+    </Sequence>
+  </BehaviorTree>
+
+  <BehaviorTree ID="DefinirAlvo">
+    <Fallback>
+      <Sequence>
+        <ScriptCondition code="papel == &apos;survey_repair&apos;"/>
+        <SetBlackboard output_key="alvo"
+                       value="fogo"/>
+      </Sequence>
+      <Sequence>
+        <ScriptCondition code="papel == &apos;search_rescue&apos;"/>
+        <SetBlackboard output_key="alvo"
+                       value="sangue"/>
+      </Sequence>
+      <SetBlackboard output_key="alvo"
+                     value="qualquer"/>
+    </Fallback>
+  </BehaviorTree>
+
+  <BehaviorTree ID="JogarMarcadores">
+    <Sequence>
+      <Fallback>
+        <Sequence>
+          <ScriptCondition code="alvo != &apos;qualquer&apos;"/>
+          <SubTree ID="JogarNaCaixa"
+                   checar_icone="1"
+                   _autoremap="true"/>
+        </Sequence>
+        <SubTree ID="JogarNaCaixa"
+                 checar_icone="0"
+                 _autoremap="true"/>
+        <AlwaysSuccess/>
+      </Fallback>
+      <ForceSuccess>
+        <MudarDeCaixa/>
+      </ForceSuccess>
+      <Fallback>
+        <Sequence>
+          <ScriptCondition code="alvo != &apos;qualquer&apos;"/>
+          <SubTree ID="JogarNaCaixa"
+                   checar_icone="1"
+                   _autoremap="true"/>
+        </Sequence>
+        <SubTree ID="JogarNaCaixa"
+                 checar_icone="0"
+                 _autoremap="true"/>
+        <AlwaysSuccess/>
+      </Fallback>
+    </Sequence>
+  </BehaviorTree>
+
+  <BehaviorTree ID="JogarNaCaixa">
+    <RetryUntilSuccessful num_attempts="4">
+      <Fallback>
+        <Sequence>
+          <ReactiveSequence>
+            <VendoCaixa/>
+            <AlinharCaixa/>
+          </ReactiveSequence>
+          <Fallback>
+            <ScriptCondition code="checar_icone == 0"/>
+            <Sequence>
+              <TirarFoto image="{image}"/>
+              <LerIcone image="{image}"
+                        icone="{icone_lido}"/>
+              <ScriptCondition code="icone_lido == alvo"/>
+            </Sequence>
+          </Fallback>
+          <SoltarMarcador/>
+        </Sequence>
+        <ForceFailure>
+          <TentarOutraPosicao/>
+        </ForceFailure>
+      </Fallback>
+    </RetryUntilSuccessful>
+  </BehaviorTree>
+
+  <BehaviorTree ID="Task3">
+    <Sequence>
+      <SubTree ID="DefinirAlvo"
+               _autoremap="true"/>
+      <SubTree ID="AcharBins"
+               _autoremap="true"/>
+      <SubTree ID="JogarMarcadores"
+               _autoremap="true"/>
+      <SubTree ID="ApagarLuzes"
+               _autoremap="true"/>
+    </Sequence>
+  </BehaviorTree>
+
+  <!-- Description of Node Models (used by Groot) -->
+  <TreeNodesModel>
+    <Action ID="AfastarRobo"
+            editable="true"/>
+    <Action ID="AlinharCaixa"
+            editable="true"/>
+    <Action ID="AlinharSeta"
+            editable="true"/>
+    <Action ID="EncostarIma"
+            editable="true"/>
+    <SubTree ID="JogarNaCaixa"
+             editable="true">
+      <input_port name="checar_icone"
+                  default="1"/>
+    </SubTree>
+    <Action ID="LerIcone"
+            editable="true">
+      <input_port name="image"
+                  default="{image}"/>
+      <output_port name="icone"
+                   default="{icone_lido}"/>
+    </Action>
+    <Condition ID="LuzApagou"
+               editable="true"/>
+    <Action ID="MudarDeCaixa"
+            editable="true"/>
+    <Action ID="MudarDeLuz"
+            editable="true"/>
+    <Action ID="ProcurarBins"
+            editable="true"/>
+    <Action ID="SeguirAteBins"
+            editable="true"/>
+    <Action ID="SoltarMarcador"
+            editable="true"/>
+    <Action ID="TentarOutraPosicao"
+            editable="true"/>
+    <Action ID="TirarFoto"
+            editable="true">
+      <output_port name="image"
+                   default="{image}"/>
+    </Action>
+    <Condition ID="VendoBins"
+               editable="true"/>
+    <Condition ID="VendoCaixa"
+               editable="true"/>
+    <Condition ID="VendoSensor"
+               editable="true"/>
+    <Condition ID="VendoSeta"
+               editable="true"/>
+  </TreeNodesModel>
+
+</root>

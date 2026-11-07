@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root BTCPP_format="4" project_name="Project">
+    <include path="task3.xml"/>
+    <!-- Description of Node Models (used by Groot) -->
+    <TreeNodesModel>
+        <Action ID="AfastarRobo" editable="true"/>
+        <Action ID="AlinharCaixa" editable="true"/>
+        <Action ID="AlinharSeta" editable="true"/>
+        <Action ID="EncostarIma" editable="true"/>
+        <SubTree ID="JogarNaCaixa" editable="true">
+            <input_port name="checar_icone" default="1"/>
+        </SubTree>
+        <Action ID="LerIcone" editable="true">
+            <input_port name="image" default="{image}"/>
+            <output_port name="icone" default="{icone_lido}"/>
+        </Action>
+        <Condition ID="LuzApagou" editable="true"/>
+        <Action ID="MudarDeCaixa" editable="true"/>
+        <Action ID="MudarDeLuz" editable="true"/>
+        <Action ID="ProcurarBins" editable="true"/>
+        <Action ID="SeguirAteBins" editable="true"/>
+        <Action ID="SoltarMarcador" editable="true"/>
+        <Action ID="TentarOutraPosicao" editable="true"/>
+        <Action ID="TirarFoto" editable="true">
+            <output_port name="image" default="{image}"/>
+        </Action>
+        <Condition ID="VendoBins" editable="true"/>
+        <Condition ID="VendoCaixa" editable="true"/>
+        <Condition ID="VendoSensor" editable="true"/>
+        <Condition ID="VendoSeta" editable="true"/>
+    </TreeNodesModel>
+</root>
